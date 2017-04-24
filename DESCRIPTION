@@ -1,0 +1,13 @@
+Package: buds
+Type: Package
+Title: What the package does (short line)
+Version: 1.0
+Date: 2017-04-24
+Author: Who wrote it
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
+Depends: R (>= 3.0.2), Rcpp (>= 0.12.10), methods
+Imports: rstan (>= 2.14.2), rstantools (>= 1.2.0), princurve (>= 1.1.12), reshape2 (>= 1.4.2)
+LinkingTo: StanHeaders (>= 2.15.0.1), rstan (>= 2.15.1), BH (>= 1.62.0.1), Rcpp (>= 0.12.10), RcppEigen (>= 0.3.2.9.1)
+RoxygenNote: 6.0.1

@@ -1,0 +1,8 @@
+exportPattern("^[[:alpha:]]+")
+
+export(fit_buds)
+export(prin_curve_loc)
+import(methods)
+import(rstan)
+importFrom(Rcpp,loadModule)
+useDynLib(buds, .registration = TRUE)
