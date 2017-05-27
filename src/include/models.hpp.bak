@@ -31,14 +31,12 @@ private:
     vector<int> i_idx;
     vector<int> j_idx;
     row_vector_d dvec;
-    row_vector_d weight;
-    double tau_shape1;
-    double tau_shape2;
+    row_vector_d rel_sd;
+    double gamma_tau;
     double gamma_bias;
-    double gamma_rho_sq;
+    double gamma_rho;
     double gamma_epsilon;
     double min_sigma;
-    row_vector_d rel_dvec2;
 public:
     model_buds(stan::io::var_context& context__,
         std::ostream* pstream__ = 0)
@@ -112,36 +110,31 @@ public:
         for (size_t i_vec__ = 0; i_vec__ < dvec_i_vec_lim__; ++i_vec__) {
             dvec[i_vec__] = vals_r__[pos__++];
         }
-        validate_non_negative_index("weight", "Npairs", Npairs);
-        context__.validate_dims("data initialization", "weight", "row_vector_d", context__.to_vec(Npairs));
-        validate_non_negative_index("weight", "Npairs", Npairs);
-        weight = row_vector_d(static_cast<Eigen::VectorXd::Index>(Npairs));
-        vals_r__ = context__.vals_r("weight");
+        validate_non_negative_index("rel_sd", "Npairs", Npairs);
+        context__.validate_dims("data initialization", "rel_sd", "row_vector_d", context__.to_vec(Npairs));
+        validate_non_negative_index("rel_sd", "Npairs", Npairs);
+        rel_sd = row_vector_d(static_cast<Eigen::VectorXd::Index>(Npairs));
+        vals_r__ = context__.vals_r("rel_sd");
         pos__ = 0;
-        size_t weight_i_vec_lim__ = Npairs;
-        for (size_t i_vec__ = 0; i_vec__ < weight_i_vec_lim__; ++i_vec__) {
-            weight[i_vec__] = vals_r__[pos__++];
+        size_t rel_sd_i_vec_lim__ = Npairs;
+        for (size_t i_vec__ = 0; i_vec__ < rel_sd_i_vec_lim__; ++i_vec__) {
+            rel_sd[i_vec__] = vals_r__[pos__++];
         }
-        context__.validate_dims("data initialization", "tau_shape1", "double", context__.to_vec());
-        tau_shape1 = double(0);
-        vals_r__ = context__.vals_r("tau_shape1");
+        context__.validate_dims("data initialization", "gamma_tau", "double", context__.to_vec());
+        gamma_tau = double(0);
+        vals_r__ = context__.vals_r("gamma_tau");
         pos__ = 0;
-        tau_shape1 = vals_r__[pos__++];
-        context__.validate_dims("data initialization", "tau_shape2", "double", context__.to_vec());
-        tau_shape2 = double(0);
-        vals_r__ = context__.vals_r("tau_shape2");
-        pos__ = 0;
-        tau_shape2 = vals_r__[pos__++];
+        gamma_tau = vals_r__[pos__++];
         context__.validate_dims("data initialization", "gamma_bias", "double", context__.to_vec());
         gamma_bias = double(0);
         vals_r__ = context__.vals_r("gamma_bias");
         pos__ = 0;
         gamma_bias = vals_r__[pos__++];
-        context__.validate_dims("data initialization", "gamma_rho_sq", "double", context__.to_vec());
-        gamma_rho_sq = double(0);
-        vals_r__ = context__.vals_r("gamma_rho_sq");
+        context__.validate_dims("data initialization", "gamma_rho", "double", context__.to_vec());
+        gamma_rho = double(0);
+        vals_r__ = context__.vals_r("gamma_rho");
         pos__ = 0;
-        gamma_rho_sq = vals_r__[pos__++];
+        gamma_rho = vals_r__[pos__++];
         context__.validate_dims("data initialization", "gamma_epsilon", "double", context__.to_vec());
         gamma_epsilon = double(0);
         vals_r__ = context__.vals_r("gamma_epsilon");
@@ -163,25 +156,15 @@ public:
             check_greater_or_equal(function__,"j_idx[k0__]",j_idx[k0__],1);
         }
         check_greater_or_equal(function__,"dvec",dvec,0);
-        check_greater_or_equal(function__,"weight",weight,0);
-        check_greater_or_equal(function__,"tau_shape1",tau_shape1,0);
-        check_greater_or_equal(function__,"tau_shape2",tau_shape2,0);
+        check_greater_or_equal(function__,"rel_sd",rel_sd,0);
+        check_greater_or_equal(function__,"gamma_tau",gamma_tau,0);
         check_greater_or_equal(function__,"gamma_bias",gamma_bias,0);
-        check_greater_or_equal(function__,"gamma_rho_sq",gamma_rho_sq,0);
+        check_greater_or_equal(function__,"gamma_rho",gamma_rho,0);
         check_greater_or_equal(function__,"gamma_epsilon",gamma_epsilon,0);
         check_greater_or_equal(function__,"min_sigma",min_sigma,0);
         // initialize data variables
-        validate_non_negative_index("rel_dvec2", "Npairs", Npairs);
-        rel_dvec2 = row_vector_d(static_cast<Eigen::VectorXd::Index>(Npairs));
-        stan::math::fill(rel_dvec2,DUMMY_VAR__);
 
         try {
-            current_statement_begin__ = 28;
-            for (int kdx = 1; kdx <= Npairs; ++kdx) {
-
-                current_statement_begin__ = 29;
-                stan::math::assign(get_base1_lhs(rel_dvec2,kdx,"rel_dvec2",1), pow(get_base1(dvec,kdx,"dvec",1),2));
-            }
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e,current_statement_begin__);
             // Next line prevents compiler griping about no return
@@ -193,6 +176,8 @@ public:
         // validate, set parameter ranges
         num_params_r__ = 0U;
         param_ranges_i__.clear();
+        ++num_params_r__;
+        ++num_params_r__;
         ++num_params_r__;
         ++num_params_r__;
         ++num_params_r__;
@@ -212,6 +197,34 @@ public:
         (void) pos__; // dummy call to supress warning
         std::vector<double> vals_r__;
         std::vector<int> vals_i__;
+
+        if (!(context__.contains_r("tau_shape1")))
+            throw std::runtime_error("variable tau_shape1 missing");
+        vals_r__ = context__.vals_r("tau_shape1");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "tau_shape1", "double", context__.to_vec());
+        // generate_declaration tau_shape1
+        double tau_shape1(0);
+        tau_shape1 = vals_r__[pos__++];
+        try {
+            writer__.scalar_lb_unconstrain(0,tau_shape1);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable tau_shape1: ") + e.what());
+        }
+
+        if (!(context__.contains_r("tau_shape2")))
+            throw std::runtime_error("variable tau_shape2 missing");
+        vals_r__ = context__.vals_r("tau_shape2");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "tau_shape2", "double", context__.to_vec());
+        // generate_declaration tau_shape2
+        double tau_shape2(0);
+        tau_shape2 = vals_r__[pos__++];
+        try {
+            writer__.scalar_lb_unconstrain(0,tau_shape2);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable tau_shape2: ") + e.what());
+        }
 
         if (!(context__.contains_r("bias")))
             throw std::runtime_error("variable bias missing");
@@ -241,18 +254,18 @@ public:
             throw std::runtime_error(std::string("Error transforming variable rho_sq: ") + e.what());
         }
 
-        if (!(context__.contains_r("meanvar")))
-            throw std::runtime_error("variable meanvar missing");
-        vals_r__ = context__.vals_r("meanvar");
+        if (!(context__.contains_r("meansd")))
+            throw std::runtime_error("variable meansd missing");
+        vals_r__ = context__.vals_r("meansd");
         pos__ = 0U;
-        context__.validate_dims("initialization", "meanvar", "double", context__.to_vec());
-        // generate_declaration meanvar
-        double meanvar(0);
-        meanvar = vals_r__[pos__++];
+        context__.validate_dims("initialization", "meansd", "double", context__.to_vec());
+        // generate_declaration meansd
+        double meansd(0);
+        meansd = vals_r__[pos__++];
         try {
-            writer__.scalar_lb_unconstrain(0,meanvar);
+            writer__.scalar_lb_unconstrain(min_sigma,meansd);
         } catch (const std::exception& e) { 
-            throw std::runtime_error(std::string("Error transforming variable meanvar: ") + e.what());
+            throw std::runtime_error(std::string("Error transforming variable meansd: ") + e.what());
         }
 
         if (!(context__.contains_r("tau")))
@@ -302,6 +315,20 @@ public:
         // model parameters
         stan::io::reader<T__> in__(params_r__,params_i__);
 
+        T__ tau_shape1;
+        (void) tau_shape1;  // dummy to suppress unused var warning
+        if (jacobian__)
+            tau_shape1 = in__.scalar_lb_constrain(0,lp__);
+        else
+            tau_shape1 = in__.scalar_lb_constrain(0);
+
+        T__ tau_shape2;
+        (void) tau_shape2;  // dummy to suppress unused var warning
+        if (jacobian__)
+            tau_shape2 = in__.scalar_lb_constrain(0,lp__);
+        else
+            tau_shape2 = in__.scalar_lb_constrain(0);
+
         T__ bias;
         (void) bias;  // dummy to suppress unused var warning
         if (jacobian__)
@@ -316,12 +343,12 @@ public:
         else
             rho_sq = in__.scalar_lb_constrain(0);
 
-        T__ meanvar;
-        (void) meanvar;  // dummy to suppress unused var warning
+        T__ meansd;
+        (void) meansd;  // dummy to suppress unused var warning
         if (jacobian__)
-            meanvar = in__.scalar_lb_constrain(0,lp__);
+            meansd = in__.scalar_lb_constrain(min_sigma,lp__);
         else
-            meanvar = in__.scalar_lb_constrain(0);
+            meansd = in__.scalar_lb_constrain(min_sigma);
 
         vector<T__> tau;
         size_t dim_tau_0__ = N;
@@ -375,35 +402,35 @@ public:
                 stan::math::fill(delta,DUMMY_VAR__);
 
 
-                current_statement_begin__ = 48;
-                for (int k = 1; k <= Npairs; ++k) {
-
-                    current_statement_begin__ = 49;
-                    stan::math::assign(get_base1_lhs(delta,k,"delta",1), (bias + (rho_sq * fabs((get_base1(tau,get_base1(i_idx,k,"i_idx",1),"tau",1) - get_base1(tau,get_base1(j_idx,k,"j_idx",1),"tau",1))))));
-                }
-                current_statement_begin__ = 52;
+                current_statement_begin__ = 38;
+                lp_accum__.add(cauchy_log<propto__>(tau_shape1, 1, gamma_tau));
+                current_statement_begin__ = 39;
+                lp_accum__.add(cauchy_log<propto__>(tau_shape2, 1, gamma_tau));
+                current_statement_begin__ = 40;
                 lp_accum__.add(cauchy_log<propto__>(bias, 0, gamma_bias));
-                current_statement_begin__ = 53;
-                lp_accum__.add(cauchy_log<propto__>(rho_sq, 0, gamma_rho_sq));
-                current_statement_begin__ = 54;
-                lp_accum__.add(cauchy_log<propto__>(meanvar, 0, gamma_epsilon));
-                current_statement_begin__ = 56;
+                current_statement_begin__ = 41;
+                lp_accum__.add(cauchy_log<propto__>(rho_sq, 1, gamma_rho));
+                current_statement_begin__ = 42;
+                lp_accum__.add(cauchy_log<propto__>(meansd, 0, gamma_epsilon));
+                current_statement_begin__ = 44;
                 for (int n = 1; n <= N; ++n) {
 
-                    current_statement_begin__ = 57;
+                    current_statement_begin__ = 45;
                     lp_accum__.add(beta_log<propto__>(get_base1(tau,n,"tau",1), tau_shape1, tau_shape2));
                 }
-                current_statement_begin__ = 61;
+                current_statement_begin__ = 48;
                 for (int kdx = 1; kdx <= Npairs; ++kdx) {
 
-                    current_statement_begin__ = 62;
-                    stan::math::assign(sig_sq, (((0.001 + meanvar) * (0.01 + get_base1(rel_dvec2,kdx,"rel_dvec2",1))) + min_sigma));
-                    current_statement_begin__ = 63;
+                    current_statement_begin__ = 49;
+                    stan::math::assign(get_base1_lhs(delta,kdx,"delta",1), (bias + (rho_sq * fabs((get_base1(tau,get_base1(i_idx,kdx,"i_idx",1),"tau",1) - get_base1(tau,get_base1(j_idx,kdx,"j_idx",1),"tau",1))))));
+                    current_statement_begin__ = 50;
+                    stan::math::assign(sig_sq, pow(stan::math::fmax((meansd * get_base1(rel_sd,kdx,"rel_sd",1)),min_sigma),2));
+                    current_statement_begin__ = 51;
                     stan::math::assign(alpha, (pow(get_base1(delta,kdx,"delta",1),2) / sig_sq));
-                    current_statement_begin__ = 64;
+                    current_statement_begin__ = 52;
                     stan::math::assign(beta, (get_base1(delta,kdx,"delta",1) / sig_sq));
-                    current_statement_begin__ = 65;
-                    lp_accum__.add((get_base1(weight,kdx,"weight",1) * gamma_log(get_base1(dvec,kdx,"dvec",1),alpha,beta)));
+                    current_statement_begin__ = 53;
+                    lp_accum__.add(gamma_log<propto__>(get_base1(dvec,kdx,"dvec",1), alpha, beta));
                 }
             }
         } catch (const std::exception& e) {
@@ -431,9 +458,11 @@ public:
 
     void get_param_names(std::vector<std::string>& names__) const {
         names__.resize(0);
+        names__.push_back("tau_shape1");
+        names__.push_back("tau_shape2");
         names__.push_back("bias");
         names__.push_back("rho_sq");
-        names__.push_back("meanvar");
+        names__.push_back("meansd");
         names__.push_back("tau");
     }
 
@@ -441,6 +470,10 @@ public:
     void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
         dimss__.resize(0);
         std::vector<size_t> dims__;
+        dims__.resize(0);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dimss__.push_back(dims__);
         dims__.resize(0);
         dimss__.push_back(dims__);
         dims__.resize(0);
@@ -465,17 +498,21 @@ public:
         static const char* function__ = "model_buds_namespace::write_array";
         (void) function__;  // dummy to suppress unused var warning
         // read-transform, write parameters
+        double tau_shape1 = in__.scalar_lb_constrain(0);
+        double tau_shape2 = in__.scalar_lb_constrain(0);
         double bias = in__.scalar_lb_constrain(0);
         double rho_sq = in__.scalar_lb_constrain(0);
-        double meanvar = in__.scalar_lb_constrain(0);
+        double meansd = in__.scalar_lb_constrain(min_sigma);
         vector<double> tau;
         size_t dim_tau_0__ = N;
         for (size_t k_0__ = 0; k_0__ < dim_tau_0__; ++k_0__) {
             tau.push_back(in__.scalar_lub_constrain(0,1));
         }
+        vars__.push_back(tau_shape1);
+        vars__.push_back(tau_shape2);
         vars__.push_back(bias);
         vars__.push_back(rho_sq);
-        vars__.push_back(meanvar);
+        vars__.push_back(meansd);
         for (int k_0__ = 0; k_0__ < N; ++k_0__) {
             vars__.push_back(tau[k_0__]);
         }
@@ -546,13 +583,19 @@ public:
                                  bool include_gqs__ = true) const {
         std::stringstream param_name_stream__;
         param_name_stream__.str(std::string());
+        param_name_stream__ << "tau_shape1";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "tau_shape2";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
         param_name_stream__ << "bias";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
         param_name_stream__ << "rho_sq";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
-        param_name_stream__ << "meanvar";
+        param_name_stream__ << "meansd";
         param_names__.push_back(param_name_stream__.str());
         for (int k_0__ = 1; k_0__ <= N; ++k_0__) {
             param_name_stream__.str(std::string());
@@ -571,13 +614,19 @@ public:
                                    bool include_gqs__ = true) const {
         std::stringstream param_name_stream__;
         param_name_stream__.str(std::string());
+        param_name_stream__ << "tau_shape1";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "tau_shape2";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
         param_name_stream__ << "bias";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
         param_name_stream__ << "rho_sq";
         param_names__.push_back(param_name_stream__.str());
         param_name_stream__.str(std::string());
-        param_name_stream__ << "meanvar";
+        param_name_stream__ << "meansd";
         param_names__.push_back(param_name_stream__.str());
         for (int k_0__ = 1; k_0__ <= N; ++k_0__) {
             param_name_stream__.str(std::string());

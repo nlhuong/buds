@@ -5,10 +5,9 @@
 \title{Fit Bayesian Unidimensional Scaling model to}
 \usage{
 fit_buds(D, K = NULL, method = c("vb", "mcmc"),
-  hyperparams = list(tau_shape1 = 1, tau_shape2 = 1, gamma_epsilon = 2.5,
-  gamma_bias = 2.5, gamma_rho_sq = 2.5, min_sigma = 0.001),
-  init_from = c("random", "principal_curve"), seed = 1234,
-  max_trials = 20, ...)
+  hyperparams = list(gamma_tau = 2.5, gamma_epsilon = 2.5, gamma_bias = 2.5,
+  gamma_rho_sq = 2.5, min_sigma = 0.03), init_from = c("random",
+  "principal_curve"), seed = 1234, max_trials = 20, ...)
 }
 \arguments{
 \item{D}{A square matrix of pairwise dissimilarities}

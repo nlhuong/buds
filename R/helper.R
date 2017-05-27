@@ -10,8 +10,6 @@
 #' one tenth of the total number of data points is used.
 #' 
 #' @return A data.frame with.
-#' 
-#' @export
 kNN_idx <- function(D, K) {
   idx <- 1:ncol(D)
   kNN.df <- apply(D, 2, function(idist) {
@@ -30,17 +28,16 @@ kNN_idx <- function(D, K) {
 #' which is an input to fit_buds function, and for obtaining 
 #' estimates for distances variances.
 #' 
-#' For each distance $d_{ij} = d(x_i, x_j)$ the function computes 
+#' For each distance  \eqn{d_{ij} = d(x_i, x_j)} the function computes 
 #' the mean and variance defined as the empirical mean and variance 
-#' of distances in a set  $\{d(x_i, x_k): x_k \in kNN of x_j\} 
-#' \cup \{d(x_j, x_l): x_l \in kNN of x_i \}$.
+#' of distances in a set   \eqn{\{d(x_i, x_k): x_k \in kNN of x_j\} 
+#' \cup \{d(x_j, x_l): x_l \in kNN of x_i \}}.
 #'
 #' @param D A square matrix of pairwise dissimilarities
 #' @param K  An integer indicating k-nearest neighbours for 
 #' computing average distance to kNN.
 #'
 #' @return A data frame to be used as input data for BUDS.
-#' @export
 get_dist_df <- function(D, K){
   kNN.df <- kNN_idx(D, K)
   rownames(D) <- colnames(D) <- 1:ncol(D)

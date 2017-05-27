@@ -2,3 +2,5 @@
 .Rbuildignore
 /.Rproj.user/
 buds.Rproj
+.Rproj.user
+.Rhistory
