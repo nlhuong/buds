@@ -21,8 +21,8 @@ which is an input to fit_buds function, and for obtaining
 estimates for distances variances.
 }
 \details{
-For each distance $d_{ij} = d(x_i, x_j)$ the function computes 
+For each distance  \eqn{d_{ij} = d(x_i, x_j)} the function computes 
 the mean and variance defined as the empirical mean and variance 
-of distances in a set  $\{d(x_i, x_k): x_k \in kNN of x_j\} 
-\cup \{d(x_j, x_l): x_l \in kNN of x_i \}$.
+of distances in a set   \eqn{\{d(x_i, x_k): x_k \in kNN of x_j\} 
+\cup \{d(x_j, x_l): x_l \in kNN of x_i \}}.
 }
