@@ -25,7 +25,7 @@ fit_buds <- function(D, K = NULL,
                        "gamma_tau"= 2.5,
                        "gamma_epsilon" = 2.5,
                        "gamma_bias" = 2.5,
-                       "gamma_rho_sq" = 2.5,
+                       "gamma_rho" = 2.5,
                        "min_sigma" = 0.03),
                      init_from = c("random", "principal_curve"),
                      seed = 1234, max_trials = 20, ...) {
