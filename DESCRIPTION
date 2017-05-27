@@ -1,12 +1,12 @@
 Package: buds
 Type: Package
-Title: What the package does (short line)
+Title: Bayesian Unidimensional Scaling (BUDS) package for recovering latent ordering of observations
 Version: 1.0
 Date: 2017-04-24
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Lan Huong Nguyen
+Maintainer: Lan Huong Nguyen <nlhuong90@gmail.com>
+Description: BUDS is a RStan based package which fits a Bayesian model to input pairwise dissimilarities for observation in order to recover latent 1D coordinates of the datapoints along an underlying data trajectory. These 1D coordinates can be used to order the observations.
+License: AGPL-3
 Depends: R (>= 3.0.2), Rcpp (>= 0.12.10), methods
 Imports: rstan (>= 2.14.2), rstantools (>= 1.2.0), princurve (>= 1.1.12), reshape2 (>= 1.4.2)
 LinkingTo: StanHeaders (>= 2.15.0.1), rstan (>= 2.15.1), BH (>= 1.62.0.1), Rcpp (>= 0.12.10), RcppEigen (>= 0.3.2.9.1)

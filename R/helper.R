@@ -36,7 +36,8 @@ kNN_idx <- function(D, K) {
 #' @param D A square matrix of pairwise dissimilarities
 #' @param K  An integer indicating k-nearest neighbours for 
 #' computing average distance to kNN.
-#'
+#' @importFrom stats var
+#' 
 #' @return A data frame to be used as input data for BUDS.
 get_dist_df <- function(D, K){
   kNN.df <- kNN_idx(D, K)

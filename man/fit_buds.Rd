@@ -18,9 +18,8 @@ distances to kNN then used as weights in the power likelihood.}
 \item{method}{Stan mode to use either "mcmc" or "vb"}
 
 \item{hyperparams}{A list of BUDS hiperparameters with named components
-set by default as follows "tau_shape1" = 1, "tau_shape2"= 1,
-"gamma_epsilon" = 2.5, "gamma_bias" = 2.5, "gamma_rho_sq" = 2.5,
-"min_sigma" = 0.001}
+set by default as follows "gamma_tau"= 2.5, "gamma_epsilon" = 2.5, 
+"gamma_bias" = 2.5, "gamma_rho_sq" = 2.5, "min_sigma" = 0.01}
 
 \item{init_from}{Initialization option either "random" or from a location
 along "principal_curve" fitted to 2D representation using PCoA on D}
