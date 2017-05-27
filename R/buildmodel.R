@@ -37,7 +37,7 @@ fit_buds <- function(D, K = NULL,
     tau0 <- prin_curve_loc(D)
     tau0 <- (tau0 - min(tau0) + offset) / (max(tau0) - min(tau0) + 2*offset)
     init <- list("tau" = tau0, "bias" = offset, "rho" = 1.0, 
-                 "meansd" = hyperparams$min_sigma,
+                 "meansd" = hyperparams$min_sigma + offset,
                  "tau_shape1" = 1.0, "tau_shape2" = 1.0)
   }
   # Number of data points
