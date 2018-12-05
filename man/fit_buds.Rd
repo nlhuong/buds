@@ -5,8 +5,8 @@
 \title{Fit Bayesian Unidimensional Scaling model to}
 \usage{
 fit_buds(D, K = NULL, method = c("vb", "mcmc"),
-  hyperparams = list(gamma_tau = 2.5, gamma_epsilon = 2.5, gamma_bias = 2.5,
-  gamma_rho = 2.5, min_sigma = 0.03), init_from = c("random",
+  hyperparams = list(gamma_tau = 2.5, gamma_epsilon = 2.5, gamma_bias =
+  2.5, gamma_rho = 2.5, min_sigma = 0.03), init_from = c("random",
   "principal_curve"), seed = 1234, max_trials = 20, ...)
 }
 \arguments{

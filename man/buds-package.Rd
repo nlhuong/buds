@@ -5,9 +5,12 @@
 \alias{buds-package}
 \alias{BUDS,}
 \alias{buds}
-\title{buds: package for Bayesian Unidimensional Scaling for mapping high-dimensional
-objects to 1D latent coordinates using pairwise dissimilarities.}
+\title{The 'buds' package.}
 \description{
-buds: package for Bayesian Unidimensional Scaling for mapping high-dimensional
-objects to 1D latent coordinates using pairwise dissimilarities.
+BUDS: package for Bayesian Unidimensional Scaling for mapping
+high-dimensional objects to 1D latent coordinates using pairwise
+dissimilarities.
+}
+\references{
+Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org
 }
