@@ -9,8 +9,8 @@ kNN_idx(D, K)
 \arguments{
 \item{D}{A dissimilarity matrix.}
 
-\item{K}{An integer indicating the number of points 
-to include in the neighbourhood. If not specified 
+\item{K}{An integer indicating the number of points
+to include in the neighbourhood. If not specified
 one tenth of the total number of data points is used.}
 }
 \value{
@@ -18,6 +18,6 @@ A data.frame with.
 }
 \description{
 Function returns a n x K data.frame with every row
-storing indices of the K nearest neighbour of 
+storing indices of the K nearest neighbour of
 a corresponding datapoint.
 }

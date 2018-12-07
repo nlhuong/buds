@@ -4,3 +4,6 @@
 buds.Rproj
 .Rproj.user
 .Rhistory
+/vignettes/
+/figs/**
+/data/**

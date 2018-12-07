@@ -14,11 +14,24 @@ Description: BUDS is an rstan based package for recovering latent ordering
 License: GPL (>=3)
 Depends: 
     methods,
-    R (>= 3.4.0),
+    R (>= 3.5.0),
     Rcpp (>= 1.0.0)
 Imports: 
     rstan (>= 2.18.2),
-    rstantools (>= 1.5.1)
+    rstantools (>= 1.5.1),
+    ggplot2 (>= 3.1.0),
+    magrittr (>= 1.5),
+    viridis (>= 0.5.1),
+    lattice (>= 0.20.38),
+    dplyr,
+    DistatisR,
+    MCMCglmm (>= 2.26),
+    Rtsne,
+    coda (>= 0.19.2),
+    plyr,
+    princurve,
+    reshape2,
+    plotly
 LinkingTo: 
     BH (>= 1.66.0-1),
     Rcpp (>= 1.0.0),

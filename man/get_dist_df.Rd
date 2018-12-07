@@ -9,7 +9,7 @@ get_dist_df(D, K)
 \arguments{
 \item{D}{A square matrix of pairwise dissimilarities}
 
-\item{K}{An integer indicating k-nearest neighbours for 
+\item{K}{An integer indicating k-nearest neighbours for
 computing average distance to kNN.}
 }
 \value{
@@ -17,12 +17,12 @@ A data frame to be used as input data for BUDS.
 }
 \description{
 Function returns distances in a long data.frame format,
-which is an input to fit_buds function, and for obtaining 
+which is an input to fit_buds function, and for obtaining
 estimates for distances variances.
 }
 \details{
-For each distance  \eqn{d_{ij} = d(x_i, x_j)} the function computes 
-the mean and variance defined as the empirical mean and variance 
-of distances in a set   \eqn{\{d(x_i, x_k): x_k \in kNN of x_j\} 
+For each distance  \eqn{d_{ij} = d(x_i, x_j)} the function computes
+the mean and variance defined as the empirical mean and variance
+of distances in a set   \eqn{\{d(x_i, x_k): x_k \in kNN of x_j\}
 \cup \{d(x_j, x_l): x_l \in kNN of x_i \}}.
 }

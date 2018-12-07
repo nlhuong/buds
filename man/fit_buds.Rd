@@ -18,11 +18,13 @@ distances to kNN then used as weights in the power likelihood.}
 \item{method}{Stan mode to use either "mcmc" or "vb"}
 
 \item{hyperparams}{A list of BUDS hiperparameters with named components
-set by default as follows "gamma_tau"= 2.5, "gamma_epsilon" = 2.5, 
+set by default as follows "gamma_tau"= 2.5, "gamma_epsilon" = 2.5,
 "gamma_bias" = 2.5, "gamma_rho_sq" = 2.5, "min_sigma" = 0.01}
 
 \item{init_from}{Initialization option either "random" or from a location
-along "principal_curve" fitted to 2D representation using PCoA on D}
+along "principal_curve" fitted to 2D representation using PCoA on D,
+or named list of initialized values for tau
+(bias, rho, taushape1, taushape2, meansd).}
 
 \item{seed}{A integer representing a random seed}
 
